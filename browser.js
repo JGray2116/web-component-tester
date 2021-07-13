@@ -16,7 +16,7 @@
 (function () {
 'use strict';
 
-window.__wctUseNpm = false;
+window.__wctUseNpm = true;
 /**
  * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -214,13 +214,13 @@ var _config = {
         [
             'stacky/browser.js',
             'async/lib/async.js',
-            'lodash/index.js',
+            'lodash/lodash.js',
             'mocha/mocha.js',
             'chai/chai.js',
             '@polymer/sinonjs/sinon.js',
             'sinon-chai/lib/sinon-chai.js',
             'accessibility-developer-tools/dist/js/axs_testing.js',
-            '@polymer/test-fixture/test-fixture.js'
+            '@polymer/test-fixture/test-fixture-mocha.js'
         ] :
         [
             'stacky/browser.js',
@@ -1495,6 +1495,7 @@ function loadSync() {
         var url = expandUrl(path, get('root'));
         debug('Loading environment import:', url);
         // Synchronous load.
+        console.log("We are HTML importing - this may cause bugs due to synchronous assumptions since HTML imports are now asynchronous with the polyfill: ", url);
         document.write('<link rel="import" href="' + encodeURI(url) +
             '">'); // jshint ignore:line
     });
