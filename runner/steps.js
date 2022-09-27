@@ -85,7 +85,16 @@ function runTests(context) {
         const runners = result.runners;
         context._testRunners = runners;
         context._socketIOServers = context._httpServers.map((httpServer) => {
-            const socketIOServer = socketIO(httpServer);
+            // W-10260469: Our WCT code coverage scripts were timing out. The
+            // plugin ecosystem/code coverage plugin setup uses web sockets to
+            // communicate between the browser and the test runner. However, the
+            // default websocket payload size is 1MB, but the browser needed to
+            // send code coverage data that was > 1MB (~1.5MB). In websockets,
+            // if the payload size is exceeded, the connection is terminated and
+            // a timeout is caused here. Therefore we update the
+            // `maxHttpBufferSize` to be 5MB just to be safe for larger code
+            // coverage payloads.
+            const socketIOServer = socketIO(httpServer, { maxHttpBufferSize: 5e6 });
             socketIOServer.on('connection', function (socket) {
                 context.emit('log:debug', 'Test client opened sideband socket');
                 socket.on('client-event', function (data) {
