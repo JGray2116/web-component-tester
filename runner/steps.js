@@ -89,12 +89,17 @@ function runTests(context) {
             // plugin ecosystem/code coverage plugin setup uses web sockets to
             // communicate between the browser and the test runner. However, the
             // default websocket payload size is 1MB, but the browser needed to
-            // send code coverage data that was > 1MB (~1.5MB). In websockets,
-            // if the payload size is exceeded, the connection is terminated and
-            // a timeout is caused here. Therefore we update the
-            // `maxHttpBufferSize` to be 5MB just to be safe for larger code
-            // coverage payloads.
-            const socketIOServer = socketIO(httpServer, { maxHttpBufferSize: 5e6 });
+            // send code coverage data that was > 1MB (~1.5MB) for some of our
+            // test cases. In websockets, if the payload size is exceeded, the
+            // connection is terminated and a timeout is caused here. Therefore we
+            // update the `maxHttpBufferSize` to be 5MB just to be safe for larger
+            // code coverage payloads.
+            //
+            // Update: however, it was discovered that for running code coverage
+            // on the JSQC test cases/JSQC bundle, the JSQC bundle itself is
+            // ~1.2MB, so the code coverage payload sent back was ~5.8MB, so I've
+            // doubled the buffer size to 12MB because JSQC is big!
+            const socketIOServer = socketIO(httpServer, { maxHttpBufferSize: 12e6 });
             socketIOServer.on('connection', function (socket) {
                 context.emit('log:debug', 'Test client opened sideband socket');
                 socket.on('client-event', function (data) {
