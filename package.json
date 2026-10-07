@@ -82,7 +82,7 @@
   },
   "optionalDependencies": {
     "update-notifier": "^2.2.0",
-    "wct-local": "^2.1.1",
+    "wct-local": "git+https://github.com/JGray2116/wct-local.git",
     "wct-sauce": "^2.0.2"
   },
   "devDependencies": {
@@ -116,7 +116,7 @@
     "rollup": "^0.25.1",
     "source-map-support": "^0.5.4",
     "watch": "^0.18.0",
-    "wct-local": "^2.1.1",
+    "wct-local": "git+https://github.com/JGray2116/wct-local.git",
     "wct-sauce": "^2.0.2"
   },
   "engines": {
